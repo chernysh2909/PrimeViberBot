@@ -64,6 +64,7 @@ keyboard = \
             }
         ]
     }
+
 smm_keyboard = \
     {
         "DefaultHeight": True,
@@ -162,14 +163,14 @@ viber = Api(BotConfiguration(
 ))
 
 
-@app.route('/incoming', methods=['POST'])
+@app.route('/', methods=['POST'])
 def incoming():
     logger.debug("received request. post data: {0}".format(request.get_data()))
     viber_request = viber.parse_request(request.get_data())
 
 
     def password_saving(client_id):
-        viber.send_messages(viber_request.sender.id, [TextMessage(text='Введіть, будь ласка, свій пароль', keyboard=keyboard)])
+        viber.send_messages(viber_request.sender.id, [TextMessage(text='Введіть, будь ласка, свій пароль')])
         link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
         with link:
             password_query = """SELECT user_password
@@ -269,7 +270,7 @@ def incoming():
                             keyboard=smm_keyboard)])
             elif today.day == 10 and SESSION['is_auth'] and SESSION['client_debt'] > 0:
                 viber.send_messages(message.sender.id, [TextMessage(text='Шановний клієнте, нагадуємо, сьогодні останній день для внесення щомісячного платежу. В разі несплати ми залишаємо за собою право припинити обслуговування до отримання оплати.',
-                        keyboard=smm_keyboard)])
+                        keyboard=keyboard)])
 
 
     def inform_rahunku():
@@ -331,7 +332,7 @@ def incoming():
                             'nachislenie', 'нарахування').replace('oplata schota', 'оплата') + ''', 
         сума: ''' + str(payment_sums[i]).replace('D', '').replace('e', '').replace('c', '').replace('i', '').replace(
                             'm', '').replace('a', '').replace('l', '').replace('(', '').replace("'", '').replace(
-                            ')', '').replace(',', '') + ' гривень', keyboard=smm_keyboard)])
+                            ')', '').replace(',', '') + ' гривень', keyboard=keyboard)])
                     i = i + 1
             viber.send_messages(message.sender.id, [TextMessage(text='Останні транзакції:', keyboard=smm_keyboard)])
             payment_extracting(SESSION['client_id'])
@@ -368,14 +369,13 @@ def incoming():
 
     if isinstance(viber_request, ViberMessageRequest):
         message = viber_request.message
+        global temp_password
 
         if message.text == 'Увійти':
-            global temp_password
             viber.send_messages(viber_request.sender.id, [TextMessage(text='Введіть, будь ласка, свій особовий рахунок',
                                                                       keyboard=keyboard)])
 
         elif len(message.text) == 9:
-            password_saving()
             SESSION['client_id'] = message.text
             temp_password = password_saving(message.text)
 
@@ -388,9 +388,9 @@ def incoming():
                 temp_chat_id = message.sender.id
                 viber.send_messages(viber_request.sender.id, [TextMessage(text='Вітаємо в персональному кабінеті! Ви успішно залоговані.',
                                                  keyboard=smm_keyboard)])
-                client_contract_extracting()
-                client_tariff_extracting()
-                client_debt_extracting()
+                client_contract_extracting(SESSION['client_id'])
+                client_tariff_extracting(SESSION['client_id'])
+                client_debt_extracting(SESSION['client_id'])
 
                 SESSION['is_auth'] = True
                 SESSION['client_contract'] = client_contract_extracting(SESSION['client_id'])
@@ -403,8 +403,7 @@ def incoming():
 
             elif str_correct_password != maybe_password:
                 viber.send_messages(viber_request.sender.id, [
-                    TextMessage(text='Введені дані некоректні! Перевірте пароль та спробуйте ще раз.',
-                                keyboard=keyboard)])
+                    TextMessage(text='Введені дані некоректні! Перевірте пароль та спробуйте ще раз.', keyboard=keyboard)])
 
         elif message.text == 'Стан рахунку' and SESSION['is_auth']:
             stan_rahunku()
@@ -431,7 +430,7 @@ def incoming():
 
 
 def set_webhook(vib):
-    viber.set_webhook('https://4a128f51ed18.ngrok.io')
+    viber.set_webhook('https://8eb1ec495f25.ngrok.io')
 
 
 if __name__ == "__main__":
