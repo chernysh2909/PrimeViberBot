@@ -53,7 +53,7 @@ keyboard = \
         "Type": "keyboard",
         "Buttons": [
             {
-                "Columns": 3,
+                "Columns": 6,
                 "Rows": 1,
                 "BgColor": "#e6f5ff",
                 "BgLoop": True,
@@ -61,16 +61,6 @@ keyboard = \
                 "ActionBody": "Увійти",
                 "ReplyType": "message",
                 "Text": "Увійти"
-            },
-            {
-                "Columns": 3,
-                "Rows": 1,
-                "BgColor": "#e6f5ff",
-                "BgLoop": True,
-                "ActionType": "reply",
-                "ActionBody": "Стати клієнтом",
-                "ReplyType": "message",
-                "Text": "Стати клієнтом"
             }
         ]
     }
@@ -172,153 +162,133 @@ viber = Api(BotConfiguration(
 ))
 
 
-@app.route('/', methods=['POST'])
+@app.route('/incoming', methods=['POST'])
 def incoming():
     logger.debug("received request. post data: {0}".format(request.get_data()))
-    viber_request = viber.parse_request(request.get_data().decode('utf8'))
-    viber.send_messages(viber_request.sender.id, [TextMessage(text="Оберіть одну з кнопок нижче.", keyboard=keyboard)])
+    viber_request = viber.parse_request(request.get_data())
 
 
-def handle_message(viber_request):
-    global temp_password
-    if viber_request.text == "Увійти":
-        viber.send_messages(viber_request.message.sender.id,
-                           [TextMessage(text='Введіть, будь ласка, свій особовий рахунок', keyboard=keyboard)])
+    def password_saving(client_id):
+        viber.send_messages(viber_request.sender.id, [TextMessage(text='Введіть, будь ласка, свій пароль', keyboard=keyboard)])
+        link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
+        with link:
+            password_query = """SELECT user_password
+                                            FROM users
+                                            WHERE user_id='""" + client_id + """'"""
+            cur = link.cursor()
+            cur.execute(password_query)
+            password = cur.fetchone()
+            return password
 
-    elif len(viber_request.text) == 9:
-        def password_saving(client_id):
-            viber.send_messages(viber_request.sender.id,
-                               [TextMessage(text='Введіть, будь ласка, свій пароль', keyboard=keyboard)])
-            link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
-            with link:
-                password_query = """SELECT user_password
-                                    FROM users
-                                    WHERE user_id='""" + client_id + """'"""
-                cur = link.cursor()
-                cur.execute(password_query)
-                password = cur.fetchone()
-                return password
 
-        SESSION['client_id'] = viber_request.text
-        temp_password = password_saving(viber_request.text)
+    def client_contract_extracting(client_id):
+        link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
+        with link:
+            client_contract_query = """SELECT user_contract_num FROM users WHERE user_id='""" + client_id + """'"""
+                                # Присваиваем курсор
+            cur = link.cursor()
+                                # Отправляем запрос со сформированным заранее текстом запроса
+            cur.execute(client_contract_query)
+                                # Результат запроса присваиваем переменной password
+            contract = cur.fetchone()
+                                # Результат возвращения функции - переменная password
+            return contract
 
-    elif len(viber_request.text) == 10:
-        str_correct_password = str(temp_password)
-        maybe_password = "('" + viber_request.text + "',)"
-        if str_correct_password == maybe_password:
-            global temp_chat_id
-            temp_chat_id = viber_request.sender.id
-            viber.send_messages(viber_request.sender.id, [
-                TextMessage(text='Вітаємо в персональному кабінеті! Ви успішно залоговані.', keyboard=smm_keyboard)])
 
-            def client_contract_extracting(client_id):
-                # Коды доступа к БД MySQL
-                link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
-                # Подключаемся к БД
-                with link:
-                    # Формируем текст запроса
-                    client_contract_query = """SELECT user_contract_num
-                                               FROM users
-                                               WHERE user_id='""" + client_id + """'"""
-                    # Присваиваем курсор
-                    cur = link.cursor()
-                    # Отправляем запрос со сформированным заранее текстом запроса
-                    cur.execute(client_contract_query)
-                    # Результат запроса присваиваем переменной password
-                    contract = cur.fetchone()
-                    # Результат возвращения функции - переменная password
-                    return contract
+    def client_tariff_extracting(client_id):
+                            # Коды доступа к БД MySQL
+        link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
+                            # Подключаемся к БД
+        with link:
+                                # Формируем текст запроса
+            client_contract_query = """SELECT user_tax
+                                                           FROM users
+                                                           WHERE user_id='""" + client_id + """'"""
+                                # Присваиваем курсор
+            cur = link.cursor()
+                                # Отправляем запрос со сформированным заранее текстом запроса
+            cur.execute(client_contract_query)
+                                # Результат запроса присваиваем переменной password
+            tariff = cur.fetchone()
+                                # Результат возвращения функции - переменная password
+            return tariff[0]
 
-            def client_tariff_extracting(client_id):
-                # Коды доступа к БД MySQL
-                link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
-                # Подключаемся к БД
-                with link:
-                    # Формируем текст запроса
-                    client_contract_query = """SELECT user_tax
-                                               FROM users
-                                               WHERE user_id='""" + client_id + """'"""
-                    # Присваиваем курсор
-                    cur = link.cursor()
-                    # Отправляем запрос со сформированным заранее текстом запроса
-                    cur.execute(client_contract_query)
-                    # Результат запроса присваиваем переменной password
-                    tariff = cur.fetchone()
-                    # Результат возвращения функции - переменная password
-                    return tariff[0]
 
-            def client_debt_extracting(client_id):
-                # Коды доступа к БД MySQL
-                link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
-                # Подключаемся к БД
-                with link:
-                    # Формируем текст запроса
-                    client_rev_query = """SELECT SUM(transaction_sum)
-                                          FROM payment_story
-                                          WHERE transaction_client='""" + client_id + """'"""
-                    # Присваиваем курсор
-                    cur = link.cursor()
-                    # Отправляем запрос со сформированным заранее текстом запроса
-                    cur.execute(client_rev_query)
-                    # Результат запроса присваиваем переменной password
-                    rev = cur.fetchone()
-                    # Формируем текст запроса
-                    client_debt_at_the_start_query = """SELECT user_balance
-                                          FROM users
-                                          WHERE user_id='""" + client_id + """'"""
-                    # Отправляем запрос со сформированным заранее текстом запроса
-                    cur.execute(client_debt_at_the_start_query)
-                    # Результат запроса присваиваем переменной password
-                    debt_at_the_start = cur.fetchone()
-                    if rev[0]:
-                        result_sum = debt_at_the_start[0] + rev[0]
-                    else:
-                        result_sum = debt_at_the_start[0] + 0
-                    # Результат возвращения функции - переменная password
-                    return result_sum
+    def client_debt_extracting(client_id):
+                            # Коды доступа к БД MySQL
+        link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
+                            # Подключаемся к БД
+        with link:
+                                # Формируем текст запроса
+            client_rev_query = """SELECT SUM(transaction_sum)
+                                                      FROM payment_story
+                                                      WHERE transaction_client='""" + client_id + """'"""
+                                # Присваиваем курсор
+            cur = link.cursor()
+                                # Отправляем запрос со сформированным заранее текстом запроса
+            cur.execute(client_rev_query)
+                                # Результат запроса присваиваем переменной password
+            rev = cur.fetchone()
+                                # Формируем текст запроса
+            client_debt_at_the_start_query = """SELECT user_balance
+                                                      FROM users
+                                                      WHERE user_id='""" + client_id + """'"""
+                                # Отправляем запрос со сформированным заранее текстом запроса
+            cur.execute(client_debt_at_the_start_query)
+                                # Результат запроса присваиваем переменной password
+            debt_at_the_start = cur.fetchone()
+            if rev[0]:
+                result_sum = debt_at_the_start[0] + rev[0]
+            else:
+                result_sum = debt_at_the_start[0] + 0
+                                # Результат возвращения функции - переменная password
+            return result_sum
 
-            SESSION['is_auth'] = True
-            SESSION['client_contract'] = client_contract_extracting(SESSION['client_id'])
-            SESSION['client_tariff'] = client_tariff_extracting(SESSION['client_id'])
-            SESSION['client_debt'] = client_debt_extracting(SESSION['client_id'])
-            SESSION['client_recommended_payment'] = SESSION['client_debt'] + SESSION['client_tariff']
-            SESSION['client_for_year_payment'] = float(SESSION['client_tariff']) * 12 * 0.9
-            viber.send_messages(viber_request.sender.id, [
-                TextMessage(text='В меню ви можете знайти доступні операції та здійснити оплату',
+
+    def stan_rahunku():
+            if SESSION['client_debt'] > 0:
+                viber.send_messages(message.sender.id, [TextMessage(text="""Ваша заборгованість: """ + str(
+                    SESSION['client_debt']) + """ гривень. Будь ласка, сплатіть її до 10 числа поточного місяця.""")])
+                viber.send_messages(message.sender.id, [
+                    TextMessage(text='Рекомендований платіж: ' + str(SESSION['client_recommended_payment']) + ' гривень')])
+                viber.send_messages(message.sender.id, [
+                    TextMessage(text='Разовий платіж за рік: ' + str(SESSION['client_for_year_payment']) + ' гривень',
+                                    keyboard=smm_keyboard)])
+            else:
+                viber.send_messages(message.sender.id, [TextMessage(
+                    text='Шановний клієнте, у вас відсутня заборгованість! ' + 'Ваш авансовий платіж: ' + str(
+                        SESSION['client_debt']) + ' гривень. Дякуємо, що вчасно сплачуєте рахунки!')])
+                viber.send_messages(message.sender.id, [
+                    TextMessage(text='Разовий платіж за рік: ' + str(SESSION['client_for_year_payment']) + ' гривень',
+                                    keyboard=smm_keyboard)])
+            today = time()
+            if today.day == 1 and SESSION['is_auth'] and SESSION['client_debt'] > 0:
+                viber.send_messages(message.sender.id, [
+                    TextMessage(
+                        text='Шановний клієнте, будь ласка, не забудьте сплатити рахунок до 10 числа поточного місяця',
                             keyboard=smm_keyboard)])
-        elif str_correct_password != maybe_password:
-            viber.send_messages(viber_request.sender.id, [
-                TextMessage(text='Введені дані некоректні! Перевірте пароль та спробуйте ще раз.', keyboard=keyboard)])
-    elif viber_request.text == 'Стан рахунку' and SESSION['is_auth']:
-        if SESSION['client_debt'] > 0:
-            viber.send_messages(viber_request.sender.id, [TextMessage(text="""Ваша заборгованість: """ + str(
-                SESSION['client_debt']) + """ гривень. Будь ласка, сплатіть її до 10 числа поточного місяця.""")])
-            viber.send_messages(viber_request.sender.id, [
-                TextMessage(text='Рекомендований платіж: ' + str(SESSION['client_recommended_payment']) + ' гривень')])
-            viber.send_messages(viber_request.sender.id, [
-                TextMessage(text='Разовий платіж за рік: ' + str(SESSION['client_for_year_payment']) + ' гривень',
-                            keyboard=smm_keyboard)])
-        else:
-            viber.send_messages(viber_request.sender.id, [TextMessage(
-                text='Шановний клієнте, у вас відсутня заборгованість! ' + 'Ваш авансовий платіж: ' + str(
-                    SESSION['client_debt']) + ' гривень. Дякуємо, що вчасно сплачуєте рахунки!')])
-            viber.send_messages(viber_request.sender.id, [
-                TextMessage(text='Разовий платіж за рік: ' + str(SESSION['client_for_year_payment']) + ' гривень',
-                            keyboard=smm_keyboard)])
-    elif viber_request.text == 'Інформація по рахунку' and SESSION['is_auth']:
-        viber.send_messages(viber_request.sender.id,
-                           [TextMessage(text='Ваш особовий рахунок: ' + str(SESSION['client_id']))])
-        viber.send_messages(viber_request.sender.id, [TextMessage(
-            text='Ваш номер договору: ' + str(SESSION['client_contract']).replace('(', '').replace("'", '').replace(',',
-                                                                                                                    '').replace(
-                ')', ''))])
-        viber.send_messages(viber_request.sender.id, [
-            TextMessage(text='Сума щомісячного платежу: ' + str(SESSION['client_tariff']) + ' гривень',
+            elif today.day == 10 and SESSION['is_auth'] and SESSION['client_debt'] > 0:
+                viber.send_messages(message.sender.id, [TextMessage(text='Шановний клієнте, нагадуємо, сьогодні останній день для внесення щомісячного платежу. В разі несплати ми залишаємо за собою право припинити обслуговування до отримання оплати.',
                         keyboard=smm_keyboard)])
-    elif viber_request.text == [TextMessage(text='Наші реквізити')] and SESSION['is_auth']:
-        viber.send_messages(viber_request.sender.id, [TextMessage(text='ТОВ "Прайм Секьюріті"', keyboard=smm_keyboard)])
-    elif viber_request.text == [TextMessage(text='Фінансова історія', keyboard=smm_keyboard)] and SESSION['is_auth']:
-        def payment_extracting(client_id):
+
+
+    def inform_rahunku():
+            viber.send_messages(message.sender.id,
+                               [TextMessage(text='Ваш особовий рахунок: ' + str(SESSION['client_id']))])
+            viber.send_messages(message.sender.id, [TextMessage(
+                text='Ваш номер договору: ' + str(SESSION['client_contract']).replace('(', '').replace("'", '').replace(',',
+                                                                                                                        '').replace(
+                    ')', ''))])
+            viber.send_messages(message.sender.id, [
+                TextMessage(text='Сума щомісячного платежу: ' + str(SESSION['client_tariff']) + ' гривень',
+                            keyboard=smm_keyboard)])
+
+
+    def our_rekvizit():
+            viber.send_messages(message.sender.id, [TextMessage(text='ТОВ "Прайм Секьюріті"', keyboard=smm_keyboard)])
+
+
+    def payment_extracting(client_id):
             # Коды доступа к БД MySQL
             link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
             # Подключаемся к БД
@@ -350,7 +320,7 @@ def handle_message(viber_request):
                 # Результат возвращения функции - переменная password
                 i = 0
                 while i < len(countcheck):
-                    viber.send_messages(viber_request.sender.id, [TextMessage(
+                    viber.send_messages(message.sender.id, [TextMessage(
                         text='id: ' + str(payment_ids[i]).replace('(', '').replace(',', '').replace(')', '') + ''', 
         дата: ''' + str(payment_datetimes[i]).replace('(', '').replace(',', '').replace(')', '').replace('d',
                                                                                                          '').replace(
@@ -363,12 +333,12 @@ def handle_message(viber_request):
                             'm', '').replace('a', '').replace('l', '').replace('(', '').replace("'", '').replace(
                             ')', '').replace(',', '') + ' гривень', keyboard=smm_keyboard)])
                     i = i + 1
+            viber.send_messages(message.sender.id, [TextMessage(text='Останні транзакції:', keyboard=smm_keyboard)])
+            payment_extracting(SESSION['client_id'])
 
-        viber.send_messages(viber_request.sender.id, [TextMessage(text='Останні транзакції:', keyboard=smm_keyboard)])
-        payment_extracting(SESSION['client_id'])
-    elif viber_request.text == [TextMessage(text='Вийти')] and SESSION['is_auth']:
-        viber.send_messages(viber_request.sender.id,
-                           [TextMessage(text='Ви успішно вийшли з персонального кабінету!', keyboard=keyboard)])
+
+    def exit():
+        viber.send_messages(message.sender.id, [TextMessage(text='Ви успішно вийшли з персонального кабінету!', keyboard=keyboard)])
         SESSION['is_auth'] = False
         SESSION['client_id'] = None
         SESSION['client_contract'] = None
@@ -376,38 +346,92 @@ def handle_message(viber_request):
         SESSION['client_tariff'] = None
         SESSION['client_recommended_payment'] = None
         SESSION['client_for_year_payment'] = None
-    elif viber_request.text == [TextMessage(text='Контакти')] and SESSION['is_auth']:
-        viber.send_messages(viber_request.sender.id, [TextMessage(text='Бухгалтерія: 066-597-95-18')])
-        viber.send_messages(viber_request.sender.id, [TextMessage(text='Гаряча лінія: 067-323-80-08')])
-        viber.send_messages(viber_request.sender.id, [TextMessage(text='admin@prime.net.ua')])
-        viber.send_messages(viber_request.sender.id, [
-            TextMessage(text='с. Петропавлівська Борщагівка ЖК «Львівський», вул. Миру 11', keyboard=smm_keyboard)])
-    elif viber_request.text == [TextMessage(text='Графік роботи')] and SESSION['is_auth']:
-        viber.send_messages(viber_request.sender.id, [TextMessage(text='''Понеділок: 09:00-18:00
+
+
+    def contacts():
+        viber.send_messages(message.sender.id, [TextMessage(text='Бухгалтерія: 066-597-95-18')])
+        viber.send_messages(message.sender.id, [TextMessage(text='Гаряча лінія: 067-323-80-08')])
+        viber.send_messages(message.sender.id, [TextMessage(text='admin@prime.net.ua')])
+        viber.send_messages(message.sender.id, [TextMessage(text='с. Петропавлівська Борщагівка ЖК «Львівський», вул. Миру 11', keyboard=smm_keyboard)])
+
+
+    def grafik():
+        viber.send_messages(message.sender.id, [TextMessage(text='''Понеділок: 09:00-18:00
         Вівторок: 09:00-18:00
         Середа: 09:00-18:00
         Четвер: 09:00-18:00
         П'ятниця: 09:00-18:00
-
         Субота: вихідний
         Неділя: вихідний
-
         13:00-14:00 - обід''', keyboard=smm_keyboard)])
-    today = time()
-    if today.day == 1 and SESSION['is_auth'] and SESSION['client_debt'] > 0:
-        viber.send_messages(viber_request.sender.id, [
-            TextMessage(text='Шановний клієнте, будь ласка, не забудьте сплатити рахунок до 10 числа поточного місяця',
-                        keyboard=smm_keyboard)])
-    if today.day == 10 and SESSION['is_auth'] and SESSION['client_debt'] > 0:
-        viber.send_messages(viber_request.sender.id, [TextMessage(
-            text='Шановний клієнте, нагадуємо, сьогодні останній день для внесення щомісячного платежу. В разі несплати ми залишаємо за собою право припинити обслуговування до отримання оплати.',
-            keyboard=smm_keyboard)])
+
+
+    if isinstance(viber_request, ViberMessageRequest):
+        message = viber_request.message
+
+        if message.text == 'Увійти':
+            global temp_password
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Введіть, будь ласка, свій особовий рахунок',
+                                                                      keyboard=keyboard)])
+
+        elif len(message.text) == 9:
+            password_saving()
+            SESSION['client_id'] = message.text
+            temp_password = password_saving(message.text)
+
+        elif len(message.text) == 10:
+            str_correct_password = str(temp_password)
+            maybe_password = "('" + message.text + "',)"
+
+            if str_correct_password == maybe_password:
+                global temp_chat_id
+                temp_chat_id = message.sender.id
+                viber.send_messages(viber_request.sender.id, [TextMessage(text='Вітаємо в персональному кабінеті! Ви успішно залоговані.',
+                                                 keyboard=smm_keyboard)])
+                client_contract_extracting()
+                client_tariff_extracting()
+                client_debt_extracting()
+
+                SESSION['is_auth'] = True
+                SESSION['client_contract'] = client_contract_extracting(SESSION['client_id'])
+                SESSION['client_tariff'] = client_tariff_extracting(SESSION['client_id'])
+                SESSION['client_debt'] = client_debt_extracting(SESSION['client_id'])
+                SESSION['client_recommended_payment'] = SESSION['client_debt'] + SESSION['client_tariff']
+                SESSION['client_for_year_payment'] = float(SESSION['client_tariff']) * 12 * 0.9
+                viber.send_messages(viber_request.sender.id, [TextMessage(text='В меню ви можете знайти доступні операції та здійснити оплату',
+                                                 keyboard=smm_keyboard)])
+
+            elif str_correct_password != maybe_password:
+                viber.send_messages(viber_request.sender.id, [
+                    TextMessage(text='Введені дані некоректні! Перевірте пароль та спробуйте ще раз.',
+                                keyboard=keyboard)])
+
+        elif message.text == 'Стан рахунку' and SESSION['is_auth']:
+            stan_rahunku()
+        elif message.text == 'Інформація по рахунку' and SESSION['is_auth']:
+            inform_rahunku()
+        elif message.text == 'Наші реквізити' and SESSION['is_auth']:
+            our_rekvizit()
+        elif message.text == 'Фінансова історія' and SESSION['is_auth']:
+            payment_extracting(SESSION['client_id'])
+        elif message.text == 'Вийти' and SESSION['is_auth']:
+            exit()
+        elif message.text == 'Контакти' and SESSION['is_auth']:
+            contacts()
+        elif message.text == 'Графік роботи' and SESSION['is_auth']:
+            grafik()
+
+    elif isinstance(viber_request, ViberConversationStartedRequest):
+        viber.send_messages(viber_request.user.id, [TextMessage(text="Оберіть одну з кнопок нижче.", keyboard=keyboard)])
+
+    elif isinstance(viber_request, ViberFailedRequest):
+        logger.warn("client failed receiving message. failure: {0}".format(viber_request))
 
     return Response(status=200)
 
 
 def set_webhook(vib):
-    viber.set_webhook('https://0164792738a4.ngrok.io')
+    viber.set_webhook('https://4a128f51ed18.ngrok.io')
 
 
 if __name__ == "__main__":
