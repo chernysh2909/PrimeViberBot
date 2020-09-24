@@ -49,18 +49,18 @@ logger.addHandler(handler)
 keyboard = \
     {
         "DefaultHeight": True,
-        "BgColor": "#FFFFFF",
+        "BgColor": "#000000",
         "Type": "keyboard",
         "Buttons": [
             {
                 "Columns": 6,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Увійти</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Увійти",
-                "ReplyType": "message",
-                "Text": "Увійти"
+                "ReplyType": "message"
             }
         ]
     }
@@ -68,88 +68,98 @@ keyboard = \
 smm_keyboard = \
     {
         "DefaultHeight": True,
-        "BgColor": "#FFFFFF",
+        "BgColor": "#000000",
         "Type": "keyboard",
         "Buttons": [
             {
                 "Columns": 3,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Стан рахунку</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Стан рахунку",
-                "ReplyType": "message",
-                "Text": "Стан рахунку"
+                "ReplyType": "message"
             },
             {
                 "Columns": 3,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Перейти до оплати</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Перейти до оплати",
-                "ReplyType": "message",
-                "Text": "Перейти до оплати"
+                "ReplyType": "message"
             },
             {
                 "Columns": 3,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Інформація по рахунку</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Інформація по рахунку",
-                "ReplyType": "message",
-                "Text": "Інформація по рахунку"
+                "ReplyType": "message"
             },
             {
                 "Columns": 3,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Наші реквізити</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Наші реквізити",
-                "ReplyType": "message",
-                "Text": "Наші реквізити"
+                "ReplyType": "message"
             },
             {
                 "Columns": 6,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Фінансова історія</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Фінансова історія",
-                "ReplyType": "message",
-                "Text": "Фінансова історія"
+                "ReplyType": "message"
             },
             {
                 "Columns": 3,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Контакти</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Контакти",
-                "ReplyType": "message",
-                "Text": "Контакти"
+                "ReplyType": "message"
             },
             {
                 "Columns": 3,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Графік роботи</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Графік роботи",
-                "ReplyType": "message",
-                "Text": "Графік роботи"
+                "ReplyType": "message"
             },
             {
-                "Columns": 6,
+                "Columns": 3,
                 "Rows": 1,
-                "BgColor": "#e6f5ff",
+                "Text": "<font color=\"#c7c5c5\">Вийти...</font>",
+                "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
-                "ActionBody": "Вийти",
-                "ReplyType": "message",
-                "Text": "Вийти"
+                "ActionBody": "Вийти...",
+                "ReplyType": "message"
+            },
+            {
+                "Columns": 3,
+                "Rows": 1,
+                "Text": "<font color=\"#c7c5c5\">Увійти</font>",
+                "BgColor": "#262626",
+                "BgLoop": True,
+                "ActionType": "reply",
+                "ActionBody": "Увійти",
+                "ReplyType": "message"
             }
         ]
     }
@@ -241,7 +251,7 @@ def incoming():
             elif str_correct_password != maybe_password:
                 viber.send_messages(viber_request.sender.id, [TextMessage(text='Введені дані некоректні! Перевірте пароль та спробуйте ще раз.', keyboard=keyboard)])
 
-        elif message.text == 'Вийти' and SESSION['is_auth']:
+        elif message.text == 'Вийти...' and SESSION['is_auth']:
             viber.send_messages(viber_request.sender.id, [
                 TextMessage(text='Ви успішно вийшли з персонального кабінету!', keyboard=keyboard)])
 
@@ -352,7 +362,7 @@ def incoming():
             viber.send_messages(viber_request.sender.id, [TextMessage(text='Портмоне: portmone.com.ua/r3/oplata-ohrany-prime-security-kievskaya-oblast', keyboard=keyboard)])
 
     elif isinstance(viber_request, ViberConversationStartedRequest):
-        viber.send_messages(viber_request.user.id, [TextMessage(text="Оберіть одну з кнопок нижче.", keyboard=keyboard)])
+        viber.send_messages(viber_request.user.id, [TextMessage(text="Вітаємо! Натисніть на кнопку для того, щоб увійти в персональний кабінет клієнта.", keyboard=keyboard)])
 
     elif isinstance(viber_request, ViberFailedRequest):
         logger.warn("client failed receiving message. failure: {0}".format(viber_request), keyboard=keyboard)
@@ -361,7 +371,7 @@ def incoming():
 
 
 def set_webhook(vib):
-    viber.set_webhook('https://e11e7e08c4a9.ngrok.io')
+    viber.set_webhook('https://9a1d9c7c9e88.ngrok.io')
 
 
 if __name__ == "__main__":
