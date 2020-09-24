@@ -55,7 +55,7 @@ keyboard = \
             {
                 "Columns": 6,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Увійти</font>",
+                "Text": "<font color=\"#ffcc33\">Увійти</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -74,7 +74,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Стан рахунку</font>",
+                "Text": "<font color=\"#ffcc33\">Стан рахунку</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -84,7 +84,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Перейти до оплати</font>",
+                "Text": "<font color=\"#ffcc33\">Перейти до оплати</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -94,7 +94,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Інформація по рахунку</font>",
+                "Text": "<font color=\"#ffcc33\">Інформація по рахунку</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -104,7 +104,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Наші реквізити</font>",
+                "Text": "<font color=\"#ffcc33\">Наші реквізити</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -114,7 +114,7 @@ smm_keyboard = \
             {
                 "Columns": 6,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Фінансова історія</font>",
+                "Text": "<font color=\"#ffcc33\">Фінансова історія</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -124,7 +124,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Контакти</font>",
+                "Text": "<font color=\"#ffcc33\">Контакти</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -134,7 +134,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Графік роботи</font>",
+                "Text": "<font color=\"#ffcc33\">Графік роботи</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -144,7 +144,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Вийти...</font>",
+                "Text": "<font color=\"#ffcc33\">Вийти...</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -154,7 +154,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#c7c5c5\">Увійти</font>",
+                "Text": "<font color=\"#ffcc33\">Увійти</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -266,28 +266,28 @@ def incoming():
         elif message.text == 'Стан рахунку' and SESSION['is_auth']:
             if SESSION['client_debt'] > 0:
                 viber.send_messages(viber_request.sender.id, [TextMessage(text="""Ваша заборгованість: """ + str(
-                    SESSION['client_debt']) + """ гривень. Будь ласка, сплатіть її до 10 числа поточного місяця.""")])
+                    SESSION['client_debt']) + """ гривень. Будь ласка, сплатіть її до 10 числа поточного місяця.""", keyboard=smm_keyboard)])
                 viber.send_messages(viber_request.sender.id, [
-                    TextMessage(text='Рекомендований платіж: ' + str(SESSION['client_recommended_payment']) + ' гривень')])
+                    TextMessage(text='Рекомендований платіж: ' + str(SESSION['client_recommended_payment']) + ' гривень', keyboard=smm_keyboard)])
                 viber.send_messages(viber_request.sender.id, [
                     TextMessage(text='Разовий платіж за рік: ' + str(SESSION['client_for_year_payment']) + ' гривень',
                         keyboard=smm_keyboard)])
             else:
                 viber.send_messages(viber_request.sender.id, [TextMessage(
                     text='Шановний клієнте, у вас відсутня заборгованість! ' + 'Ваш авансовий платіж: ' + str(
-                        SESSION['client_debt']) + ' гривень. Дякуємо, що вчасно сплачуєте рахунки!')])
+                        SESSION['client_debt']) + ' гривень. Дякуємо, що вчасно сплачуєте рахунки!', keyboard=smm_keyboard)])
                 viber.send_messages(viber_request.sender.id, [
                     TextMessage(text='Разовий платіж за рік: ' + str(SESSION['client_for_year_payment']) + ' гривень',
                         keyboard=smm_keyboard)])
 
         elif message.text == 'Інформація по рахунку' and SESSION['is_auth']:
             viber.send_messages(viber_request.sender.id,
-                                [TextMessage(text='Ваш особовий рахунок: ' + str(SESSION['client_id']))])
+                                [TextMessage(text='Ваш особовий рахунок: ' + str(SESSION['client_id']), keyboard=smm_keyboard)])
             viber.send_messages(viber_request.sender.id, [TextMessage(
                 text='Ваш номер договору: ' + str(SESSION['client_contract']).replace('(', '').replace("'", '').replace(
                     ',',
                     '').replace(
-                    ')', ''))])
+                    ')', ''), keyboard=smm_keyboard)])
             viber.send_messages(viber_request.sender.id, [
                 TextMessage(text='Сума щомісячного платежу: ' + str(SESSION['client_tariff']) + ' гривень',
                             keyboard=smm_keyboard)])
@@ -342,10 +342,10 @@ def incoming():
             payment_extracting(SESSION['client_id'])
 
         elif message.text == 'Контакти' and SESSION['is_auth']:
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='Бухгалтерія: 066-597-95-18')])
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='Гаряча лінія: 067-323-80-08')])
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='admin@prime.net.ua')])
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='Наш сайт: https://www.prime.net.ua/')])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Бухгалтерія: 066-597-95-18', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Гаряча лінія: 067-323-80-08', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='admin@prime.net.ua', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Наш сайт: https://www.prime.net.ua/', keyboard=smm_keyboard)])
             viber.send_messages(viber_request.sender.id, [TextMessage(text='с. Петропавлівська Борщагівка ЖК «Львівський», вул. Миру 11', keyboard=smm_keyboard)])
 
         elif message.text == 'Графік роботи' and SESSION['is_auth']:
@@ -359,7 +359,7 @@ def incoming():
 13:00-14:00 - обід''', keyboard=smm_keyboard)])
 
         elif message.text == 'Перейти до оплати' and SESSION['is_auth']:
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='Портмоне: portmone.com.ua/r3/oplata-ohrany-prime-security-kievskaya-oblast', keyboard=keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Портмоне: portmone.com.ua/r3/oplata-ohrany-prime-security-kievskaya-oblast', keyboard=smm_keyboard)])
 
     elif isinstance(viber_request, ViberConversationStartedRequest):
         viber.send_messages(viber_request.user.id, [TextMessage(text="Вітаємо! Натисніть на кнопку для того, щоб увійти в персональний кабінет клієнта.", keyboard=keyboard)])
