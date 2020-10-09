@@ -55,7 +55,7 @@ keyboard = \
             {
                 "Columns": 6,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Увійти</font>",
+                "Text": "<font color=\"#ffffff\">Увійти</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -74,7 +74,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Стан рахунку</font>",
+                "Text": "<font color=\"#ffffff\">Стан рахунку</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -84,7 +84,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Перейти до оплати</font>",
+                "Text": "<font color=\"#ffffff\">Перейти до оплати</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -94,7 +94,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Інформація по рахунку</font>",
+                "Text": "<font color=\"#ffffff\">Інформація по рахунку</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -104,7 +104,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Наші реквізити</font>",
+                "Text": "<font color=\"#ffffff\">Наші реквізити</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -114,7 +114,7 @@ smm_keyboard = \
             {
                 "Columns": 6,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Фінансова історія</font>",
+                "Text": "<font color=\"#ffffff\">Фінансова історія</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -124,7 +124,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Контакти</font>",
+                "Text": "<font color=\"#ffffff\">Контакти</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -134,7 +134,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Графік роботи</font>",
+                "Text": "<font color=\"#ffffff\">Графік роботи</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -144,7 +144,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Вийти...</font>",
+                "Text": "<font color=\"#ffffff\">Вийти...</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -154,7 +154,7 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffcc33\">Увійти</font>",
+                "Text": "<font color=\"#ffffff\">Увійти</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
@@ -371,7 +371,7 @@ def incoming():
 
 
 def set_webhook(vib):
-    viber.set_webhook('https://9a1d9c7c9e88.ngrok.io')
+    viber.set_webhook('https://d46cedebdd3d.ngrok.io')
 
 
 if __name__ == "__main__":
