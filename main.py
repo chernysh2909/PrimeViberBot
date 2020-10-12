@@ -370,7 +370,7 @@ def incoming():
     return Response(status=200)
 
 
-def set_webhook(viber):
+def set_webhook(vib):
     viber.unset_webhook()
     time.sleep(1)
     viber.set_webhook('https://serene-river-66909.herokuapp.com/')
