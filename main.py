@@ -383,4 +383,4 @@ if __name__ == "__main__":
     t.start()
 
     context = ('server.crt', 'server.key')
-    app.run(host='https://serene-river-66909.herokuapp.com/', port=8443, debug=True)
+    app.run(host='0.0.0.0', port=8443, debug=True)
