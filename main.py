@@ -370,17 +370,6 @@ def incoming():
     return Response(status=200)
 
 
-def set_webhook(vib):
-    viber.unset_webhook()
-    time.sleep(1)
-    viber.set_webhook('https://serene-river-66909.herokuapp.com/')
-
-
 if __name__ == "__main__":
-    scheduler = sched.scheduler(time.time, time.sleep)
-    scheduler.enter(5, 1, set_webhook, (viber,))
-    t = threading.Thread(target=scheduler.run)
-    t.start()
-
     context = ('server.crt', 'server.key')
     app.run(host='0.0.0.0', port=8443, debug=True)
