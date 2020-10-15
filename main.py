@@ -372,7 +372,7 @@ def incoming():
 def set_webhook(vib):
     viber.unset_webhook()
     time.sleep(1)
-    viber.set_webhook('https://serene-river-66909.herokuapp.com/')
+    viber.set_webhook(' https://serene-river-66909.herokuapp.com/')
 
 
 if __name__ == "__main__":
@@ -382,4 +382,4 @@ if __name__ == "__main__":
     t.start()
 
     context = ('server.crt', 'server.key')
-    app.run(host='0.0.0.0', port=443, debug=True)
+    app.run(host='0.0.0.0', port=8443, debug=True)
