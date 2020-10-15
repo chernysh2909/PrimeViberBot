@@ -1,7 +1,4 @@
 from viberbot.api.viber_requests import ViberUnsubscribedRequest
-from linebot import (
-    LineBotApi, WebhookHandler
-)
 
 from flask import Flask, request, Response
 from viberbot import Api
@@ -169,8 +166,12 @@ smm_keyboard = \
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('4c26c6fd10e7d327-52ad10fcdb87074c-b9c8a79085b4a1f9')
-handler = WebhookHandler('https://serene-river-66909.herokuapp.com')
+viber = Api(BotConfiguration(
+    name='PRIMESECURITYBOT',
+    avatar='http://viber.com/avatar.jpg',
+    auth_token='4c4ab881870009fa-8e6786b46e9e2219-5349b607629d3c86'
+))
+
 
 @app.route('/', methods=['POST'])
 def incoming():
@@ -367,3 +368,18 @@ def incoming():
         logger.warn("client failed receiving message. failure: {0}".format(viber_request), keyboard=keyboard)
 
     return Response(status=200)
+
+def set_webhook(vib):
+    viber.unset_webhook()
+    time.sleep(1)
+    viber.set_webhook('https://serene-river-66909.herokuapp.com/')
+
+
+if __name__ == "__main__":
+    scheduler = sched.scheduler(time.time, time.sleep)
+    scheduler.enter(5, 1, set_webhook, (viber,))
+    t = threading.Thread(target=scheduler.run)
+    t.start()
+
+    context = ('server.crt', 'server.key')
+    app.run(host='0.0.0.0', port=443, debug=True)
