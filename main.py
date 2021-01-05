@@ -9,6 +9,7 @@ from viberbot.api.viber_requests import ViberFailedRequest, ViberConversationSta
 from viberbot.api.viber_requests import ViberMessageRequest
 from viberbot.api.viber_requests import ViberSubscribedRequest
 
+import os
 import random
 import time
 import logging
@@ -60,6 +61,46 @@ keyboard = \
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Увійти",
+                "ReplyType": "message"
+            },
+            # {
+            #     "Columns": 3,
+            #     "Rows": 1,
+            #     "Text": "<font color=\"#ffffff\">Наші реквізити</font>",
+            #     "BgColor": "#262626",
+            #     "BgLoop": True,
+            #     "ActionType": "reply",
+            #     "ActionBody": "Наші реквізити",
+            #     "ReplyType": "message"
+            # },
+            {
+                "Columns": 2,
+                "Rows": 1,
+                "Text": "<font color=\"#ffffff\">Графік роботи</font>",
+                "BgColor": "#262626",
+                "BgLoop": True,
+                "ActionType": "reply",
+                "ActionBody": "Графік роботи",
+                "ReplyType": "message"
+            },
+            {
+                "Columns": 2,
+                "Rows": 1,
+                "Text": "<font color=\"#ffffff\">Соц мережі</font>",
+                "BgColor": "#262626",
+                "BgLoop": True,
+                "ActionType": "reply",
+                "ActionBody": "Соц мережі",
+                "ReplyType": "message"
+            },
+            {
+                "Columns": 2,
+                "Rows": 1,
+                "Text": "<font color=\"#ffffff\">Контакти</font>",
+                "BgColor": "#262626",
+                "BgLoop": True,
+                "ActionType": "reply",
+                "ActionBody": "Контакти",
                 "ReplyType": "message"
             }
         ]
@@ -124,11 +165,11 @@ smm_keyboard = \
             {
                 "Columns": 3,
                 "Rows": 1,
-                "Text": "<font color=\"#ffffff\">Контакти</font>",
+                "Text": "<font color=\"#ffffff\">Соц мережі</font>",
                 "BgColor": "#262626",
                 "BgLoop": True,
                 "ActionType": "reply",
-                "ActionBody": "Контакти",
+                "ActionBody": "Соц мережі",
                 "ReplyType": "message"
             },
             {
@@ -142,7 +183,17 @@ smm_keyboard = \
                 "ReplyType": "message"
             },
             {
-                "Columns": 3,
+                "Columns": 6,
+                "Rows": 1,
+                "Text": "<font color=\"#ffffff\">Контакти</font>",
+                "BgColor": "#262626",
+                "BgLoop": True,
+                "ActionType": "reply",
+                "ActionBody": "Контакти",
+                "ReplyType": "message"
+            },
+            {
+                "Columns": 6,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Вийти...</font>",
                 "BgColor": "#262626",
@@ -150,26 +201,16 @@ smm_keyboard = \
                 "ActionType": "reply",
                 "ActionBody": "Вийти...",
                 "ReplyType": "message"
-            },
-            {
-                "Columns": 3,
-                "Rows": 1,
-                "Text": "<font color=\"#ffffff\">Увійти</font>",
-                "BgColor": "#262626",
-                "BgLoop": True,
-                "ActionType": "reply",
-                "ActionBody": "Увійти",
-                "ReplyType": "message"
             }
         ]
     }
+port = int(os.environ.get('PORT', 5000))
 
 app = Flask(__name__)
-
 viber = Api(BotConfiguration(
     name='PRIMESECURITYBOT',
     avatar='http://viber.com/avatar.jpg',
-    auth_token='4c4ab881870009fa-8e6786b46e9e2219-5349b607629d3c86'
+    auth_token='4c620ba834000fe9-3e3fd4704ca10b76-4f4b031a6097aa0b'
 ))
 
 
@@ -299,8 +340,15 @@ def incoming():
 п/р UA983510050000026006564312000,
 у банку АТ  "УкрСиббанк"
 Київ, МФО 351005, Київська обл.,Києво-Святошинський р., с.Петропавлівська Борщагівка,вул.Миру,буд.11,прим.150, 08130,
-тел.: (066) 5979518''', keyboard=smm_keyboard)])
-
+тел.: (067) 400 83 70''', keyboard=smm_keyboard)])
+        elif message.text == 'Наші реквізити' and message.text != SESSION['is_auth']:
+            viber.send_messages(viber_request.sender.id, [TextMessage(text=
+'''ТОВ "ПРАЙМ-СЕКЬЮРІТІ".
+Код за ЄДРПОУ 38958975,
+п/р UA983510050000026006564312000,
+у банку АТ  "УкрСиббанк"
+Київ, МФО 351005, Київська обл.,Києво-Святошинський р., с.Петропавлівська Борщагівка,вул.Миру,буд.11,прим.150, 08130,
+тел.: (067) 400 83 70''', keyboard=keyboard)])
         elif message.text == 'Фінансова історія' and SESSION['is_auth']:
             def payment_extracting(client_id):
                 link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
@@ -340,13 +388,29 @@ def incoming():
                     i = i + 1
             viber.send_messages(viber_request.sender.id, [TextMessage(text='Останні транзакції:', keyboard=smm_keyboard)])
             payment_extracting(SESSION['client_id'])
+        elif message.text == 'Соц мережі' and SESSION['is_auth']:
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Facebook PrimeSecurity: https://www.facebook.com/prime.securiity/', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Facebook Игорь Лаптев: https://www.facebook.com/imlaptev', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Instagram PrimeSecurity: https://instagram.com/prime_security_ua?igshid=27lla3fgykge', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Instagram Игорь Лаптев: https://instagram.com/imlaptev?igshid=ha5gbfpp18vo', keyboard=smm_keyboard)])
+        elif message.text == 'Соц мережі' and message.text != SESSION['is_auth']:
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Facebook PrimeSecurity: https://www.facebook.com/prime.securiity/', keyboard=keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Facebook Игорь Лаптев: https://www.facebook.com/imlaptev', keyboard=keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Instagram PrimeSecurity: https://instagram.com/prime_security_ua?igshid=27lla3fgykge', keyboard=keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Instagram Игорь Лаптев: https://instagram.com/imlaptev?igshid=ha5gbfpp18vo', keyboard=keyboard)])
 
         elif message.text == 'Контакти' and SESSION['is_auth']:
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='Бухгалтерія: 066-597-95-18', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Бухгалтерія: 067-400-83-70', keyboard=smm_keyboard)])
             viber.send_messages(viber_request.sender.id, [TextMessage(text='Гаряча лінія: 067-323-80-08', keyboard=smm_keyboard)])
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='admin@prime.net.ua', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Пошта: manager@prime.net.ua', keyboard=smm_keyboard)])
             viber.send_messages(viber_request.sender.id, [TextMessage(text='Наш сайт: https://www.prime.net.ua/', keyboard=smm_keyboard)])
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='с. Петропавлівська Борщагівка ЖК «Львівський», вул. Миру 11', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='с. Петропавлівська Борщагівка ЖК «Львівський», вул. Миру 11 буд. 11 офіс 150', keyboard=smm_keyboard)])
+        elif message.text == 'Контакти' and message.text != SESSION['is_auth']:
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Бухгалтерія: 067-400-83-70', keyboard=keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Гаряча лінія: 067-323-80-08', keyboard=keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Пошта: manager@prime.net.ua', keyboard=keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Наш сайт: https://www.prime.net.ua/', keyboard=keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='с. Петропавлівська Борщагівка ЖК «Львівський», вул. Миру 11 буд. 11 офіс 150', keyboard=keyboard)])
 
         elif message.text == 'Графік роботи' and SESSION['is_auth']:
             viber.send_messages(viber_request.sender.id, [TextMessage(text='''Понеділок: 09:00-18:00
@@ -357,6 +421,15 @@ def incoming():
 Субота: вихідний
 Неділя: вихідний
 13:00-14:00 - обід''', keyboard=smm_keyboard)])
+        elif message.text == 'Графік роботи' and message.text != SESSION['is_auth']:
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='''Понеділок: 09:00-18:00
+Вівторок: 09:00-18:00
+Середа: 09:00-18:00
+Четвер: 09:00-18:00
+П'ятниця: 09:00-18:00
+Субота: вихідний
+Неділя: вихідний
+13:00-14:00 - обід''', keyboard=keyboard)])
 
         elif message.text == 'Перейти до оплати' and SESSION['is_auth']:
             viber.send_messages(viber_request.sender.id, [TextMessage(text='Портмоне: portmone.com.ua/r3/oplata-ohrany-prime-security-kievskaya-oblast', keyboard=smm_keyboard)])
@@ -373,7 +446,7 @@ def incoming():
 def set_webhook(vib):
     viber.unset_webhook()
     time.sleep(1)
-    viber.set_webhook('https://serene-river-66909.herokuapp.com/')
+    viber.set_webhook(f'https://serene-river-66909.herokuapp.com/')
 
 
 if __name__ == "__main__":
@@ -382,5 +455,4 @@ if __name__ == "__main__":
     t = threading.Thread(target=scheduler.run)
     t.start()
 
-    context = ('server.crt', 'server.key')
-    app.run(host='0.0.0.0', port=3000, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
