@@ -50,14 +50,14 @@ logger.addHandler(handler)
 keyboard = \
     {
         "DefaultHeight": True,
-        "BgColor": "#000000",
+        "BgColor": "#c3c3c3",
         "Type": "keyboard",
         "Buttons": [
             {
                 "Columns": 6,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Увійти</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Увійти",
@@ -67,37 +67,38 @@ keyboard = \
             #     "Columns": 3,
             #     "Rows": 1,
             #     "Text": "<font color=\"#ffffff\">Наші реквізити</font>",
-            #     "BgColor": "#262626",
+            #     "BgColor": "#000000",
             #     "BgLoop": True,
             #     "ActionType": "reply",
             #     "ActionBody": "Наші реквізити",
             #     "ReplyType": "message"
             # },
             {
-                "Columns": 2,
+                "Columns": 3,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Графік роботи</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Графік роботи",
                 "ReplyType": "message"
             },
+
             {
-                "Columns": 2,
+                "Columns": 3,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Соц мережі</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Соц мережі",
                 "ReplyType": "message"
             },
             {
-                "Columns": 2,
+                "Columns": 6,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Контакти</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Контакти",
@@ -109,14 +110,14 @@ keyboard = \
 smm_keyboard = \
     {
         "DefaultHeight": True,
-        "BgColor": "#000000",
+        "BgColor": "#c3c3c3",
         "Type": "keyboard",
         "Buttons": [
             {
                 "Columns": 3,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Стан рахунку</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Стан рахунку",
@@ -126,17 +127,17 @@ smm_keyboard = \
                 "Columns": 3,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Перейти до оплати</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Перейти до оплати",
                 "ReplyType": "message"
             },
             {
-                "Columns": 3,
+                "Columns": 6,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Інформація по рахунку</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Інформація по рахунку",
@@ -146,17 +147,17 @@ smm_keyboard = \
                 "Columns": 3,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Наші реквізити</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Наші реквізити",
                 "ReplyType": "message"
             },
             {
-                "Columns": 6,
+                "Columns": 3,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Фінансова історія</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Фінансова історія",
@@ -166,7 +167,7 @@ smm_keyboard = \
                 "Columns": 3,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Соц мережі</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Соц мережі",
@@ -176,7 +177,7 @@ smm_keyboard = \
                 "Columns": 3,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Графік роботи</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Графік роботи",
@@ -186,7 +187,7 @@ smm_keyboard = \
                 "Columns": 6,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Контакти</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Контакти",
@@ -196,7 +197,7 @@ smm_keyboard = \
                 "Columns": 6,
                 "Rows": 1,
                 "Text": "<font color=\"#ffffff\">Вийти...</font>",
-                "BgColor": "#262626",
+                "BgColor": "#000000",
                 "BgLoop": True,
                 "ActionType": "reply",
                 "ActionBody": "Вийти...",
@@ -257,6 +258,14 @@ def incoming():
                     contract = cursor.fetchone()
                     return contract
 
+                def client_compani(client_id):
+                    link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
+                    cursor = link.cursor()
+                    client_compani = """SELECT user_compani FROM users WHERE user_id='""" + client_id + """'"""
+                    cursor.execute(client_compani)
+                    compani = cursor.fetchone()
+                    return compani
+
                 def client_tariff_extracting(client_id):
                     link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
                     cur = link.cursor()
@@ -281,6 +290,7 @@ def incoming():
                     return result_sum
 
                 SESSION['is_auth'] = True
+                SESSION['client_compani'] = client_compani(SESSION['client_id'])
                 SESSION['client_contract'] = client_contract_extracting(SESSION['client_id'])
                 SESSION['client_tariff'] = client_tariff_extracting(SESSION['client_id'])
                 SESSION['client_debt'] = client_debt_extracting(SESSION['client_id'])
@@ -291,6 +301,12 @@ def incoming():
 
             elif str_correct_password != maybe_password:
                 viber.send_messages(viber_request.sender.id, [TextMessage(text='Введені дані некоректні! Перевірте пароль та спробуйте ще раз.', keyboard=keyboard)])
+
+            elif len(message.text) != 5:
+                viber.send_messages(viber_request.sender.id, [
+                    TextMessage(text='Введені дані некоректні! Спробуйте ще раз.',
+                                keyboard=keyboard)])
+
 
         elif message.text == 'Вийти...' and SESSION['is_auth']:
             viber.send_messages(viber_request.sender.id, [
@@ -333,22 +349,24 @@ def incoming():
                 TextMessage(text='Сума щомісячного платежу: ' + str(SESSION['client_tariff']) + ' гривень',
                             keyboard=smm_keyboard)])
 
-        elif message.text == 'Наші реквізити' and SESSION['is_auth']:
+        elif message.text == 'Наші реквізити' and SESSION['is_auth'] and SESSION['client_compani'] == 'Prime1':
             viber.send_messages(viber_request.sender.id, [TextMessage(text=
-'''ТОВ "ПРАЙМ-СЕКЬЮРІТІ".
-Код за ЄДРПОУ 38958975,
-п/р UA983510050000026006564312000,
-у банку АТ  "УкрСиббанк"
-Київ, МФО 351005, Київська обл.,Києво-Святошинський р., с.Петропавлівська Борщагівка,вул.Миру,буд.11,прим.150, 08130,
-тел.: (067) 400 83 70''', keyboard=smm_keyboard)])
-        elif message.text == 'Наші реквізити' and message.text != SESSION['is_auth']:
+'''ТОВ «ПРАЙМ-СЕКЬЮРІТІ-1»
+Юридична адреса: 08130, Київська область, Києво-Святошинський район, село Петропавлівська Борщагівка, вул. Миру, 11, оф. 150
+п/р UA513348510000000026004112772
+в АТ «ПУМБ», МФО 334851
+Код ЄДРПОУ 43587382
+Тел: +38 067 400 83 70 
+Пошта: manager@prime.net.ua''', keyboard=smm_keyboard)])
+        elif message.text == 'Наші реквізити' and SESSION['is_auth'] and SESSION['client_compani'] == 'Prime2':
             viber.send_messages(viber_request.sender.id, [TextMessage(text=
-'''ТОВ "ПРАЙМ-СЕКЬЮРІТІ".
-Код за ЄДРПОУ 38958975,
-п/р UA983510050000026006564312000,
-у банку АТ  "УкрСиббанк"
-Київ, МФО 351005, Київська обл.,Києво-Святошинський р., с.Петропавлівська Борщагівка,вул.Миру,буд.11,прим.150, 08130,
-тел.: (067) 400 83 70''', keyboard=keyboard)])
+'''ТОВ «ПРАЙМ-СЕКЬЮРІТІ-2»
+Юридична адреса: 08130, Київська область, Києво-Святошинський район, село Петропавлівська Борщагівка, вул. Миру, 11, оф. 150
+п/р UA063348510000000026000132217
+в АТ «ПУМБ» МФО 334851
+Код ЄДРПОУ 44135940
+Тел: +38 067 400 83 70 
+Пошта: manager@prime.net.ua''', keyboard=smm_keyboard)])
         elif message.text == 'Фінансова історія' and SESSION['is_auth']:
             def payment_extracting(client_id):
                 link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
