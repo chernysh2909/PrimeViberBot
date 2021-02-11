@@ -264,6 +264,7 @@ def incoming():
                     client_compani = """SELECT user_compani FROM users WHERE user_id='""" + client_id + """'"""
                     cursor.execute(client_compani)
                     compani = cursor.fetchone()
+                    print(compani)
                     return compani
 
                 def client_tariff_extracting(client_id):
@@ -299,6 +300,7 @@ def incoming():
                 viber.send_messages(viber_request.sender.id, [TextMessage(text='В меню ви можете знайти доступні операції та здійснити оплату',
                                                  keyboard=smm_keyboard)])
                 temp_compani = client_compani(message.text)
+                print(temp_compani)
 
             elif str_correct_password != maybe_password:
                 viber.send_messages(viber_request.sender.id, [TextMessage(text='Введені дані некоректні! Перевірте пароль та спробуйте ще раз.', keyboard=keyboard)])
