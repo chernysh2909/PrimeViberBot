@@ -26,6 +26,7 @@ SESSION = dict()
 SESSION['is_auth'] = False
 SESSION['client_id'] = '000000000'
 SESSION['client_contract'] = '00/00/00'
+SESSION['client_compani'] = ''
 SESSION['client_debt'] = 0
 SESSION['client_tariff'] = 0
 SESSION['client_recommended_payment'] = SESSION['client_debt'] + SESSION['client_tariff']
@@ -349,9 +350,8 @@ def incoming():
             viber.send_messages(viber_request.sender.id, [
                 TextMessage(text='Сума щомісячного платежу: ' + str(SESSION['client_tariff']) + ' гривень',
                             keyboard=smm_keyboard)])
-        temp_compani = client_compani(message.text)
-        print(temp_compani)
-        elif message.text == 'Наші реквізити' and SESSION['is_auth'] and temp_compani == 'Prime1':
+        
+        elif message.text == 'Наші реквізити' and SESSION['is_auth'] and SESSION['client_compani'] == 'Prime1':
             viber.send_messages(viber_request.sender.id, [TextMessage(text=
 '''ТОВ «ПРАЙМ-СЕКЬЮРІТІ-1»
 Юридична адреса: 08130, Київська область, Києво-Святошинський район, село Петропавлівська Борщагівка, вул. Миру, 11, оф. 150
@@ -360,7 +360,7 @@ def incoming():
 Код ЄДРПОУ 43587382
 Тел: +38 067 400 83 70 
 Пошта: manager@prime.net.ua''', keyboard=smm_keyboard)])
-        elif message.text == 'Наші реквізити' and SESSION['is_auth'] and temp_compani == 'Prime2':
+        elif message.text == 'Наші реквізити' and SESSION['is_auth'] and SESSION['client_compani'] == 'Prime2':
             viber.send_messages(viber_request.sender.id, [TextMessage(text=
 '''ТОВ «ПРАЙМ-СЕКЬЮРІТІ-2»
 Юридична адреса: 08130, Київська область, Києво-Святошинський район, село Петропавлівська Борщагівка, вул. Миру, 11, оф. 150
