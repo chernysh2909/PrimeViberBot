@@ -299,8 +299,6 @@ def incoming():
                 SESSION['client_for_year_payment'] = float(SESSION['client_tariff']) * 12 * 0.9
                 viber.send_messages(viber_request.sender.id, [TextMessage(text='В меню ви можете знайти доступні операції та здійснити оплату',
                                                  keyboard=smm_keyboard)])
-                temp_compani = client_compani(message.text)
-                print(temp_compani)
 
             elif str_correct_password != maybe_password:
                 viber.send_messages(viber_request.sender.id, [TextMessage(text='Введені дані некоректні! Перевірте пароль та спробуйте ще раз.', keyboard=keyboard)])
@@ -351,7 +349,8 @@ def incoming():
             viber.send_messages(viber_request.sender.id, [
                 TextMessage(text='Сума щомісячного платежу: ' + str(SESSION['client_tariff']) + ' гривень',
                             keyboard=smm_keyboard)])
-        
+        temp_compani = client_compani(message.text)
+        print(temp_compani)
         elif message.text == 'Наші реквізити' and SESSION['is_auth'] and temp_compani == 'Prime1':
             viber.send_messages(viber_request.sender.id, [TextMessage(text=
 '''ТОВ «ПРАЙМ-СЕКЬЮРІТІ-1»
