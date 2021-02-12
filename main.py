@@ -264,7 +264,7 @@ def incoming():
                     cursor = link.cursor()
                     client_compani = """SELECT user_compani FROM users WHERE user_id='""" + client_id + """'"""
                     cursor.execute(client_compani)
-                    compani = cursor.fetchone()
+                    compani = cursor.fetchall()
                     print(compani)
                     return compani
 
