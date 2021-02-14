@@ -265,7 +265,7 @@ def incoming():
                     client_compani = """SELECT user_compani FROM users WHERE user_id='""" + client_id + """'"""
                     cursor.execute(client_compani)
                     compani = cursor.fetchone()
-                    return compani
+                    return int(compani)
 
                 def client_tariff_extracting(client_id):
                     link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
