@@ -265,7 +265,7 @@ def incoming():
                     client_compani = """SELECT user_compani FROM users WHERE user_id='""" + client_id + """'"""
                     cursor.execute(client_compani)
                     compani = cursor.fetchone()
-                    return str(compani)
+                    return compani
 
                 def client_tariff_extracting(client_id):
                     link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
@@ -354,7 +354,7 @@ def incoming():
         elif SESSION['client_compani'].replace('(', '').replace("'", '').replace(
                     ',',
                     '').replace(
-                    ')', '') == 'Prime1' and message.text == 'Наші реквізити':
+                    ')', '') == '1' and message.text == 'Наші реквізити':
             viber.send_messages(viber_request.sender.id, [TextMessage(text=
 '''ТОВ «ПРАЙМ-СЕКЬЮРІТІ-1»
 Юридична адреса: 08130, Київська область, Києво-Святошинський район, село Петропавлівська Борщагівка, вул. Миру, 11, оф. 150
@@ -366,7 +366,7 @@ def incoming():
         elif SESSION['client_compani'].replace('(', '').replace("'", '').replace(
                     ',',
                     '').replace(
-                    ')', '') == 'Prime2' and message.text == 'Наші реквізити':
+                    ')', '') == '2' and message.text == 'Наші реквізити':
             viber.send_messages(viber_request.sender.id, [TextMessage(text=
 '''ТОВ «ПРАЙМ-СЕКЬЮРІТІ-2»
 Юридична адреса: 08130, Київська область, Києво-Святошинський район, село Петропавлівська Борщагівка, вул. Миру, 11, оф. 150
