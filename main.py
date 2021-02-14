@@ -26,7 +26,7 @@ SESSION = dict()
 SESSION['is_auth'] = False
 SESSION['client_id'] = '000000000'
 SESSION['client_contract'] = '00/00/00'
-SESSION['client_compani'] = ''
+SESSION['client_compani'] = '0'
 SESSION['client_debt'] = 0
 SESSION['client_tariff'] = 0
 SESSION['client_recommended_payment'] = SESSION['client_debt'] + SESSION['client_tariff']
@@ -265,7 +265,7 @@ def incoming():
                     client_compani = """SELECT user_compani FROM users WHERE user_id='""" + client_id + """'"""
                     cursor.execute(client_compani)
                     compani = cursor.fetchone()
-                    return int(compani)
+                    return compani
 
                 def client_tariff_extracting(client_id):
                     link = pymysql.connect('prime00.mysql.tools', 'prime00_clients', '8y&@40oInG', 'prime00_clients')
@@ -351,7 +351,7 @@ def incoming():
                 TextMessage(text='Сума щомісячного платежу: ' + str(SESSION['client_tariff']) + ' гривень',
                             keyboard=smm_keyboard)])
         
-        elif SESSION['client_compani'].replace('(', '').replace("'", '').replace(
+        elif str(SESSION['client_compani']).replace('(', '').replace("'", '').replace(
                     ',',
                     '').replace(
                     ')', '') == '1' and message.text == 'Наші реквізити':
@@ -363,7 +363,7 @@ def incoming():
 Код ЄДРПОУ 43587382
 Тел: +38 067 400 83 70 
 Пошта: manager@prime.net.ua''', keyboard=smm_keyboard)])
-        elif SESSION['client_compani'].replace('(', '').replace("'", '').replace(
+        elif str(SESSION['client_compani']).replace('(', '').replace("'", '').replace(
                     ',',
                     '').replace(
                     ')', '') == '2' and message.text == 'Наші реквізити':
