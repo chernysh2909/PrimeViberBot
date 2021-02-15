@@ -457,7 +457,15 @@ def incoming():
 Неділя: вихідний
 13:00-14:00 - обід''', keyboard=keyboard)])
 
-        elif message.text == 'Перейти до оплати' and SESSION['is_auth']:
+        elif message.text == 'Перейти до оплати' and str(SESSION['client_compani']).replace('(', '').replace("'", '').replace(
+                    ',',
+                    '').replace(
+                    ')', '') == '1' and SESSION['is_auth']:
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Пока-что нельзя оплатить с помощью portmone', keyboard=smm_keyboard)])
+        elif message.text == 'Перейти до оплати' and str(SESSION['client_compani']).replace('(', '').replace("'", '').replace(
+                    ',',
+                    '').replace(
+                    ')', '') == '2' and SESSION['is_auth']:
             viber.send_messages(viber_request.sender.id, [TextMessage(text='Портмоне: portmone.com.ua/r3/oplata-ohrany-prime-security-kievskaya-oblast', keyboard=smm_keyboard)])
 
     elif isinstance(viber_request, ViberConversationStartedRequest):
