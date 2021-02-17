@@ -461,7 +461,7 @@ def incoming():
                     ',',
                     '').replace(
                     ')', '') == '1' and SESSION['is_auth']:
-            viber.send_messages(viber_request.sender.id, [TextMessage(text='Пока-что нельзя оплатить с помощью portmone', keyboard=smm_keyboard)])
+            viber.send_messages(viber_request.sender.id, [TextMessage(text='Портмоне: portmone.com.ua/r3/ru/terminal/index/index/id/28649', keyboard=smm_keyboard)])
         elif message.text == 'Перейти до оплати' and str(SESSION['client_compani']).replace('(', '').replace("'", '').replace(
                     ',',
                     '').replace(
