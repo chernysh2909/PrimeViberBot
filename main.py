@@ -315,7 +315,7 @@ def incoming():
         elif message.text == 'Стан рахунку' and SESSION['is_auth']:
             if SESSION['client_debt'] > 0:
                 viber.send_messages(viber_request.sender.id, [TextMessage(text="""Ваша заборгованість: """ + str(
-                    SESSION['client_debt']) + """ гривень. Будь ласка, сплатіть її до 10 числа поточного місяця.""", keyboard=smm_keyboard)])
+                    SESSION['client_debt']) + """ гривень. \nБудь ласка, сплатіть її до 10 числа поточного місяця.""", keyboard=smm_keyboard)])
                 viber.send_messages(viber_request.sender.id, [
                     TextMessage(text='Рекомендований платіж: ' + str(SESSION['client_recommended_payment']) + ' гривень', keyboard=smm_keyboard)])
                 viber.send_messages(viber_request.sender.id, [
@@ -324,7 +324,7 @@ def incoming():
             else:
                 viber.send_messages(viber_request.sender.id, [TextMessage(
                     text='Шановний клієнте, у вас відсутня заборгованість! ' + 'Ваш авансовий платіж: ' + str(
-                        SESSION['client_debt']) + ' гривень. Дякуємо, що вчасно сплачуєте рахунки!', keyboard=smm_keyboard)])
+                        SESSION['client_debt']).replace('-', '+') + ' гривень. \nДякуємо, що вчасно сплачуєте рахунки!', keyboard=smm_keyboard)])
                 viber.send_messages(viber_request.sender.id, [
                     TextMessage(text='Разовий платіж за рік: ' + str(SESSION['client_for_year_payment']) + ' гривень',
                         keyboard=smm_keyboard)])
