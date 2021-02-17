@@ -64,16 +64,6 @@ keyboard = \
                 "ActionBody": "Увійти",
                 "ReplyType": "message"
             },
-            # {
-            #     "Columns": 3,
-            #     "Rows": 1,
-            #     "Text": "<font color=\"#ffffff\">Наші реквізити</font>",
-            #     "BgColor": "#000000",
-            #     "BgLoop": True,
-            #     "ActionType": "reply",
-            #     "ActionBody": "Наші реквізити",
-            #     "ReplyType": "message"
-            # },
             {
                 "Columns": 3,
                 "Rows": 1,
@@ -114,16 +104,16 @@ smm_keyboard = \
         "BgColor": "#c3c3c3",
         "Type": "keyboard",
         "Buttons": [
-            {
-                "Columns": 3,
-                "Rows": 1,
-                "Text": "<font color=\"#ffffff\">Стан рахунку</font>",
-                "BgColor": "#000000",
-                "BgLoop": True,
-                "ActionType": "reply",
-                "ActionBody": "Стан рахунку",
-                "ReplyType": "message"
-            },
+            # {
+            #     "Columns": 3,
+            #     "Rows": 1,
+            #     "Text": "<font color=\"#ffffff\">Стан рахунку</font>",
+            #     "BgColor": "#000000",
+            #     "BgLoop": True,
+            #     "ActionType": "reply",
+            #     "ActionBody": "Стан рахунку",
+            #     "ReplyType": "message"
+            # },
             {
                 "Columns": 3,
                 "Rows": 1,
@@ -154,16 +144,16 @@ smm_keyboard = \
                 "ActionBody": "Наші реквізити",
                 "ReplyType": "message"
             },
-            {
-                "Columns": 3,
-                "Rows": 1,
-                "Text": "<font color=\"#ffffff\">Фінансова історія</font>",
-                "BgColor": "#000000",
-                "BgLoop": True,
-                "ActionType": "reply",
-                "ActionBody": "Фінансова історія",
-                "ReplyType": "message"
-            },
+            # {
+            #     "Columns": 3,
+            #     "Rows": 1,
+            #     "Text": "<font color=\"#ffffff\">Фінансова історія</font>",
+            #     "BgColor": "#000000",
+            #     "BgLoop": True,
+            #     "ActionType": "reply",
+            #     "ActionBody": "Фінансова історія",
+            #     "ReplyType": "message"
+            # },
             {
                 "Columns": 3,
                 "Rows": 1,
